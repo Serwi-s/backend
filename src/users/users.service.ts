@@ -35,16 +35,24 @@ export class UsersService {
     return await bcrypt.compare(password, hashed);
   }
 
-  async createToken(props: any): Promise<string> {
+  async createToken<T>(props: T | any): Promise<string> {
     return jwt.sign(props, TOKEN, { expiresIn: "720h" });
   }
 
-  async verifyToken(token: string): Promise<any> {
-    return jwt.verify(token, TOKEN);
+  async verifyToken<T>(
+    token: string,
+    callback: (error: any, decoded: T) => void
+  ) {
+    jwt.verify(token, TOKEN, callback);
   }
 
   public findUser(email: string): Promise<UsersEntity> {
-    return this.userRepository.findOne({ email });
+    return this.userRepository.findOne({
+      select: ["email", "password", "id"],
+      where: {
+        email,
+      },
+    });
   }
 
   public createUser(props: UserProps): Promise<InsertResult> {
