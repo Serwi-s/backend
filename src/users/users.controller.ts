@@ -42,23 +42,26 @@ export class UsersController {
   }
 
   @Post("/register")
-  registerUser(
-    @Body() { password, email }: UsersDto,
-    @Res() response: Response
-  ) {
-    this.usersService.findUser(email).then((user) => {
+  registerUser(@Body() props: UsersDto, @Res() response: Response) {
+    this.usersService.findUser(props.email).then((user) => {
       if (typeof user !== "undefined") {
         return response.status(400).send({
           error: "User with that email already exists",
         });
       }
 
-      this.usersService.hashPassword(password).then((hashedPassword) => {
+      this.usersService.hashPassword(props.password).then((hashedPassword) => {
         if (hashedPassword) {
           this.usersService
-            .createUser({ email, password: hashedPassword })
+            .createUser({ ...props, password: hashedPassword })
             .then(({ raw, identifiers }) => {
               const id = identifiers[0]?.id;
+
+              if (raw.affectedRows === 0)
+                return response.status(400).send({
+                  error: "Creating user failed",
+                  statusCode: 400,
+                });
 
               if (raw.affectedRows > 0) {
                 this.usersService.createToken({ user_id: id }).then((token) => {
