@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   Req,
   Res,
@@ -12,9 +13,6 @@ import { RequestExtend } from "src/@types/types";
 import { OffersService } from "./offers.service";
 import { Response } from "express";
 import { OffersDto } from "./dto/offers.dto";
-import { UsersEntity } from "src/users/users.entity";
-import { OffersEntity } from "./offers.entity";
-import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
 @Controller("offers")
 export class OffersController {
@@ -39,9 +37,27 @@ export class OffersController {
     return this.offersService.getOfferByGivenText(text, skip, take);
   }
 
+  @Put()
+  updateOffer(
+    @Body() props: any,
+    @Req() { user_id }: RequestExtend<string>,
+    @Res() response: Response
+  ) {
+    if (typeof user_id === "undefined") return;
+    this.offersService.getOneByOfferId(props.offer_id).then((result) => {
+      if (user_id !== result.user_id) {
+        return response.status(400).send({
+          error: "NOTALLOWED",
+          message: "You are not allowed to update this offer",
+          statusCode: 400,
+        });
+      }
+    });
+  }
+
   @Post()
   createOffer(
-    @Req() { user_id }: RequestExtend<QueryDeepPartialEntity<OffersEntity>>,
+    @Req() { user_id }: RequestExtend<string>,
     @Body() props: OffersDto,
     @Res() response: Response
   ) {

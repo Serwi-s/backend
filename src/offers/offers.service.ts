@@ -1,11 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { InsertResult, Like, Repository } from "typeorm";
-import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { OffersEntity } from "./offers.entity";
 
 interface OfferProps {
-  user_id: QueryDeepPartialEntity<OffersEntity>;
+  user_id: string;
   title: string;
   desc: string;
   price: number;
@@ -19,7 +18,7 @@ export class OffersService {
   ) {}
 
   public createOffer(props: OfferProps): Promise<InsertResult> {
-    return this.offersRepository.insert({ ...props });
+    return this.offersRepository.insert({ ...props, exp_date: new Date() });
   }
 
   public getAllOffers(skip = 0, take = 10): Promise<OffersEntity[]> {
@@ -42,7 +41,9 @@ export class OffersService {
   }
 
   public getOneByOfferId(id: string): Promise<OffersEntity> {
-    return this.offersRepository.findOne(id);
+    return this.offersRepository.findOne({
+      where: { id },
+    });
   }
 
   public getOffersByCategory() {

@@ -18,7 +18,7 @@ export class AppMiddleware implements NestMiddleware {
         headers.token,
         (err, decoded) => {
           if (err) {
-            req.user_id = null;
+            req.user_id = undefined;
           }
           if (decoded) {
             req.user_id = decoded.user_id;
