@@ -1,5 +1,5 @@
 import { Request } from "express";
 
-export interface RequestExtend extends Request {
-  user_id: string;
+export interface RequestExtend<Type> extends Request {
+  user_id: Type;
 }

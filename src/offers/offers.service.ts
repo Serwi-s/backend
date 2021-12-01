@@ -1,12 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UsersEntity } from "src/users/users.entity";
-import { Like, Repository } from "typeorm";
+import { InsertResult, Like, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { OffersEntity } from "./offers.entity";
 
 interface OfferProps {
-  user_id: QueryDeepPartialEntity<UsersEntity>;
+  user_id: QueryDeepPartialEntity<OffersEntity>;
   title: string;
   desc: string;
   price: number;
@@ -19,7 +18,7 @@ export class OffersService {
     private offersRepository: Repository<OffersEntity>
   ) {}
 
-  public createOffer(props: OfferProps) {
+  public createOffer(props: OfferProps): Promise<InsertResult> {
     return this.offersRepository.insert({ ...props });
   }
 

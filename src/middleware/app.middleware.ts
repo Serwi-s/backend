@@ -6,7 +6,7 @@ import { UsersService } from "src/users/users.service";
 @Injectable()
 export class AppMiddleware implements NestMiddleware {
   constructor(private usersService: UsersService) {}
-  use(req: RequestExtend, _: Response, next: NextFunction) {
+  use(req: RequestExtend<string>, _: Response, next: NextFunction) {
     const headers = req.headers as any;
 
     if (
@@ -17,6 +17,9 @@ export class AppMiddleware implements NestMiddleware {
       this.usersService.verifyToken<{ user_id: string }>(
         headers.token,
         (err, decoded) => {
+          if (err) {
+            req.user_id = null;
+          }
           if (decoded) {
             req.user_id = decoded.user_id;
           }
