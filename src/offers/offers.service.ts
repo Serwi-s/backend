@@ -46,5 +46,9 @@ export class OffersService {
     return this.offersRepository.findOne(id);
   }
 
+  public getOffersByCategory() {
+    return;
+  }
+
   public updateOffer(props: unknown) {}
 }

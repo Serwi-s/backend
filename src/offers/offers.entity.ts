@@ -5,8 +5,10 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { ImagesEntity } from "./images.entity";
 
 @Entity("offers")
 export class OffersEntity {
@@ -32,4 +34,8 @@ export class OffersEntity {
 
   @Column({ type: "tinyint" })
   rating: number; // 1-5
+
+  @OneToMany(() => ImagesEntity, (type) => type.offer_id)
+  @JoinColumn({ name: "images" })
+  images: ImagesEntity[];
 }

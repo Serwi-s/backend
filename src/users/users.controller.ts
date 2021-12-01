@@ -1,14 +1,14 @@
 import { Body, Controller, Post, Res } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Response } from "express";
-import { UsersDto } from "./dto/users.dto";
+import { RegisterDto, LoginDto } from "./dto/users.dto";
 
 @Controller("users")
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post("/login")
-  loginUser(@Body() { password, email }: UsersDto, @Res() response: Response) {
+  loginUser(@Body() { password, email }: LoginDto, @Res() response: Response) {
     this.usersService.findUser(email).then((user) => {
       if (typeof user === "undefined") {
         return response.status(400).send({
@@ -42,7 +42,7 @@ export class UsersController {
   }
 
   @Post("/register")
-  registerUser(@Body() props: UsersDto, @Res() response: Response) {
+  registerUser(@Body() props: RegisterDto, @Res() response: Response) {
     this.usersService.findUser(props.email).then((user) => {
       if (typeof user !== "undefined") {
         return response.status(400).send({
