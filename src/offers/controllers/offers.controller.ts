@@ -10,9 +10,9 @@ import {
   Res,
 } from "@nestjs/common";
 import { RequestExtend } from "src/@types/types";
-import { OffersService } from "./offers.service";
+import { OffersService } from "../offers.service";
 import { Response } from "express";
-import { OffersDto } from "./dto/offers.dto";
+import { OffersDto } from "../dto/offers.dto";
 
 @Controller("offers")
 export class OffersController {

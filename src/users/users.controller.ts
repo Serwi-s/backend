@@ -1,11 +1,18 @@
-import { Body, Controller, Post, Res } from "@nestjs/common";
+import { Body, Controller, Post, Req, Res } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Response } from "express";
 import { RegisterDto, LoginDto } from "./dto/users.dto";
+import { RequestExtend } from "src/@types/types";
 
 @Controller("users")
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
+  @Post("/token") // refresh token
+  useRefreshToken(@Req() { user_id }: RequestExtend<string>) {
+    if (typeof user_id === "undefined") return;
+    return this.usersService.createToken({ user_id });
+  }
 
   @Post("/login")
   loginUser(@Body() { password, email }: LoginDto, @Res() response: Response) {

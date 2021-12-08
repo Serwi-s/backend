@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { InsertResult, Like, Repository } from "typeorm";
-import { OffersEntity } from "./offers.entity";
+import { OffersEntity } from "./Entity/offers.entity";
 
 interface OfferProps {
   user_id: string;

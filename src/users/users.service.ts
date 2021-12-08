@@ -56,6 +56,6 @@ export class UsersService {
   }
 
   public createUser(props: UserProps): Promise<InsertResult> {
-    return this.userRepository.insert({ ...props, joined_at: new Date() });
+    return this.userRepository.insert({ ...props });
   }
 }

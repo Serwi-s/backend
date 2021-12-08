@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { UserDetailsEntity } from "./details.entity";
 
 @Entity("users")
 export class UsersEntity {
@@ -17,27 +20,13 @@ export class UsersEntity {
   password: string;
 
   @CreateDateColumn()
-  @Column({ name: "joined_at", insert: true })
-  joined_at: Date;
+  @Column({ name: "last_login", insert: true })
+  last_login: Date;
 
-  @Column({ type: "varchar", length: "50", nullable: false })
-  name: string;
+  @Column({ type: "boolean", default: false })
+  admin: boolean;
 
-  @Column({ type: "varchar", length: "50", nullable: false })
-  surname: string;
-
-  @Column({ type: "varchar", length: "50" })
-  phone_number: string;
-
-  @Column({ type: "varchar", length: "50" })
-  city: string;
-
-  @Column({ type: "varchar", length: "50" })
-  street: string;
-
-  @Column({ type: "varchar", length: "50" })
-  home_nr: string;
-
-  @Column({ type: "varchar", length: "50" })
-  postal_code: string;
+  @OneToOne(() => UserDetailsEntity, (type) => type.user_id)
+  @JoinColumn({ name: "details" })
+  details: UserDetailsEntity;
 }
