@@ -10,7 +10,7 @@ export class UsersController {
 
   @Post("/token") // refresh token
   useRefreshToken(@Req() { user_id }: RequestExtend<string>) {
-    if (typeof user_id === "undefined") return;
+    if (typeof user_id === "undefined") return "not allowed";
     return this.usersService.createToken({ user_id });
   }
 
@@ -37,6 +37,11 @@ export class UsersController {
             })
             .then((token) => {
               if (token) {
+                response.cookie("user", token, {
+                  secure: true,
+                  httpOnly: true,
+                  maxAge: 1728 * 10000, // 48h
+                });
                 return response.send({
                   message: "Success",
                   token: token,
@@ -72,6 +77,11 @@ export class UsersController {
 
               if (raw.affectedRows > 0) {
                 this.usersService.createToken({ user_id: id }).then((token) => {
+                  response.cookie("user", token, {
+                    secure: true,
+                    httpOnly: true,
+                    maxAge: 1728 * 10000, // 48h
+                  });
                   return response.status(201).send({
                     user_id: id,
                     token: token,

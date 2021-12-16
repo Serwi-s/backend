@@ -23,6 +23,7 @@ export class OffersService {
 
   public getAllOffers(skip = 0, take = 10): Promise<OffersEntity[]> {
     return this.offersRepository.find({
+      relations: ["author", "images"], // remove user sensitive data
       skip,
       take,
     });

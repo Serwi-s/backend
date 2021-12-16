@@ -45,13 +45,14 @@ export class OffersController {
   ) {
     if (typeof user_id === "undefined") return;
     this.offersService.getOneByOfferId(props.offer_id).then((result) => {
-      if (user_id !== result.user_id) {
-        return response.status(400).send({
-          error: "NOTALLOWED",
-          message: "You are not allowed to update this offer",
-          statusCode: 400,
-        });
-      }
+      console.log(result);
+      // if (user_id !== result.user_id) {
+      //   return response.status(400).send({
+      //     error: "NOTALLOWED",
+      //     message: "You are not allowed to update this offer",
+      //     statusCode: 400,
+      //   });
+      // }
     });
   }
 

@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { OffersEntity } from "./offers.entity";
 
 @Entity("images")
 export class ImagesEntity {
@@ -11,6 +18,7 @@ export class ImagesEntity {
   @Column({ type: "varchar" })
   original_name: string;
 
-  @Column({ type: "varchar" })
+  @ManyToOne(() => OffersEntity, (type) => type.id)
+  @JoinColumn({ name: "offer_id" })
   offer_id: string;
 }

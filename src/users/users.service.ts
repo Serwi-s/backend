@@ -4,17 +4,21 @@ import { InsertResult, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
+import { UserDetailsEntity } from "./details.entity";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
 interface UserProps {
   password: string;
   email: string;
-  name: string;
-  surname: string;
+}
+
+interface UserDetails extends UserProps {
   phone_number?: string;
   city?: string;
   street?: string;
   home_nr?: string;
   postal_code?: string;
+  user_id: QueryDeepPartialEntity<UserDetailsEntity>;
 }
 
 export const TOKEN =
@@ -24,7 +28,9 @@ export const TOKEN =
 export class UsersService {
   constructor(
     @InjectRepository(UsersEntity)
-    private userRepository: Repository<UsersEntity>
+    private userRepository: Repository<UsersEntity>,
+    @InjectRepository(UserDetailsEntity)
+    private detailsRepository: Repository<UserDetailsEntity>
   ) {}
 
   hashPassword(password: string): Promise<string> {
@@ -57,5 +63,9 @@ export class UsersService {
 
   public createUser(props: UserProps): Promise<InsertResult> {
     return this.userRepository.insert({ ...props });
+  }
+
+  public addUserDetails(props: Required<UserDetails>) {
+    return this.detailsRepository.insert(props);
   }
 }

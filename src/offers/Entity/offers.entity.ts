@@ -15,8 +15,9 @@ export class OffersEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: "uuid" })
-  user_id: string;
+  @ManyToOne(() => UsersEntity, (type) => type.id)
+  @JoinColumn({ name: "author" })
+  author: UsersEntity;
 
   @CreateDateColumn()
   @Column({ insert: true })

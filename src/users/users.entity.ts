@@ -1,8 +1,10 @@
+import { OffersEntity } from "src/offers/Entity/offers.entity";
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -29,4 +31,8 @@ export class UsersEntity {
   @OneToOne(() => UserDetailsEntity, (type) => type.user_id)
   @JoinColumn({ name: "details" })
   details: UserDetailsEntity;
+
+  @OneToMany(() => OffersEntity, (type) => type.id)
+  @JoinColumn({ name: "offers" })
+  offers: OffersEntity[];
 }
